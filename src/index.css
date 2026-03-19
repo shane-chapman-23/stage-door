@@ -5,8 +5,13 @@
    ========================= */
 
 * {
-    box-sizing: border-box;
-    font-family: "Inter", sans-serif;
+   box-sizing: border-box;
+   font-family: "Inter", sans-serif;
+}
+
+body {
+   background-color: var(--color-bg);
+   color: var(--color-text);
 }
 
 /* =========================
@@ -14,10 +19,15 @@
    ========================= */
 
 @theme {
+   /* colours */
+   --color-bg: #F9FAFB;
+   --color-surface: #F3F4F6;
+   --color-text: #111827;
+   --color-highlight: #7C2D6B;
 
     /* typography */
     --text-h1: clamp(2rem, 4vw, 6rem);
-    --text-h2: clamp(1.5rem, 3vw, 4.5rem)
+    --text-h2: clamp(1.5rem, 3vw, 4.5rem);
 
 }
 

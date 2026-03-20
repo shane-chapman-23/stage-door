@@ -121,7 +121,7 @@ export default function Nav() {
         ref={menuRef}
         inert={!menuOpen}
         aria-hidden={!menuOpen}
-        className={`fixed top-0 right-0 flex h-full w-full transform flex-col gap-7 bg-surface px-4 py-20 transition-transform duration-200 min-[500px]:w-[400px] md:hidden ${
+        className={`fixed top-0 right-0 flex h-full w-full transform flex-col gap-7 bg-surface shadow-md px-4 py-20 transition-transform duration-200 min-[500px]:w-[400px] md:hidden ${
           menuOpen ? "translate-x-0" : "translate-x-full"
         }`}
       >

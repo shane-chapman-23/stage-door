@@ -6,11 +6,11 @@ export default function Home() {
       <div className="grid lg:grid-cols-2 items-center justify-center">
         {/* Header */}
         <header className="flex flex-col gap-2 sm:items-start mx-auto">
-          <h1 className="text-3xl sm:text-4xl xl:text-4xl 2xl:text-5xl font-extrabold leading-tight font-libre text-left">
+          <h1 className="text-4xl xl:text-4xl 2xl:text-5xl font-extrabold leading-tight font-libre text-left">
             <span>Stage Door Productions</span> <br />
             <span className="">Charitable Trust</span>
           </h1>
-          <p className="text-text/60 text-xs 2xl:text-lg text-left">
+          <p className="text-text/60 text-sm 2xl:text-lg text-left">
             Performing arts workshops, seminars, training programmes, and
             events.
           </p>

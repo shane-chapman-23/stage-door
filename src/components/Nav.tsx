@@ -99,7 +99,7 @@ export default function Nav() {
   }, []);
 
   return (
-    <nav className="relative flex h-20 items-center justify-center gap-6 px-4 py-2">
+    <nav className="flex h-20 items-center justify-center gap-6 px-4 py-2">
       <div className="z-10 flex h-10 flex-1 items-center justify-start">
         Logo Placeholder
       </div>

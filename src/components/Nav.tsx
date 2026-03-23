@@ -123,6 +123,16 @@ export default function Nav() {
     wasOpenRef.current = menuOpen;
   }, [menuOpen]);
 
+  useEffect(() => {
+    const handleFocus = () => {
+      setShowNav(true);
+    };
+
+    window.addEventListener("focusin", handleFocus);
+
+    return () => window.removeEventListener("focusin", handleFocus);
+  }, []);
+
   // Closes the mobile menu if user clicks outside the menu and button.
   useEffect(() => {
     if (!menuOpen) return;

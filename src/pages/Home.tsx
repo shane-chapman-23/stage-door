@@ -4,7 +4,7 @@ import Sponsors from "@/components/Sponsors";
 export default function Home() {
   return (
     <section className="pt-30 lg:pt-30 px-6">
-      <div className="grid xl:grid-cols-2 items-center justify-center">
+      <div className="grid xl:grid-cols-2 items-center justify-center sm:h-[55vh]">
         {/* Header */}
         <header className="flex flex-col gap-2 sm:items-start mx-auto">
           <h1 className="text-4xl xl:text-4xl 2xl:text-5xl font-extrabold leading-tight font-libre text-left">

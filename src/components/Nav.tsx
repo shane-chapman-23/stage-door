@@ -11,6 +11,10 @@ const navLinkClass = ({ isActive }: { isActive: boolean }) =>
 
 export default function Nav() {
   const [menuOpen, setMenuOpen] = useState(false);
+  const [showNav, setShowNav] = useState(true);
+
+  const lastScrollYRef = useRef(0);
+  const lastScrollTimeRef = useRef(0);
 
   const buttonRef = useRef<HTMLButtonElement | null>(null);
   const menuRef = useRef<HTMLDivElement | null>(null);
@@ -40,6 +44,58 @@ export default function Nav() {
       {link.label}
     </NavLink>
   ));
+
+  useEffect(() => {
+    const SCROLL_THRESHOLD = 8;
+
+    lastScrollYRef.current = window.scrollY;
+
+    const handleScroll = () => {
+      const currentScrollY = window.scrollY;
+      const scrollDelta = currentScrollY - lastScrollYRef.current;
+
+      lastScrollTimeRef.current = Date.now();
+
+      // Always show at the very top.
+      if (currentScrollY <= 0) {
+        setShowNav(true);
+        lastScrollYRef.current = currentScrollY;
+        return;
+      }
+
+      // Ignore tiny movements so it does not flicker.
+      if (Math.abs(scrollDelta) < SCROLL_THRESHOLD) {
+        return;
+      }
+
+      if (scrollDelta > 0) {
+        setShowNav(false); // scrolling down
+      } else {
+        setShowNav(true); // scrolling up
+      }
+
+      lastScrollYRef.current = currentScrollY;
+    };
+
+    window.addEventListener("scroll", handleScroll, { passive: true });
+
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
+
+  useEffect(() => {
+    const handleMouseMove = () => {
+      // Do not instantly re-show while the user is still actively scrolling.
+      const justScrolled = Date.now() - lastScrollTimeRef.current < 150;
+
+      if (!justScrolled) {
+        setShowNav(true);
+      }
+    };
+
+    window.addEventListener("mousemove", handleMouseMove);
+
+    return () => window.removeEventListener("mousemove", handleMouseMove);
+  }, []);
 
   // Allows user to close the mobile menu with the Escape key.
   useEffect(() => {
@@ -99,7 +155,11 @@ export default function Nav() {
   }, []);
 
   return (
-    <nav className="flex h-20 items-center justify-center gap-6 px-4 py-2">
+    <nav
+      className={`fixed top-0 left-0 z-50 flex h-15 w-full items-center justify-center gap-6 px-4 py-2 bg-bg transition-transform duration-200
+      ${showNav ? "translate-y-0" : "-translate-y-full"}
+  `}
+    >
       <div className="z-10 flex h-10 flex-1 items-center justify-start">
         Logo Placeholder
       </div>

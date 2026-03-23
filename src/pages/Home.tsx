@@ -3,7 +3,7 @@ import Sponsors from "@/components/Sponsors";
 
 export default function Home() {
   return (
-    <section className="pt-10 lg:pt-20 px-6">
+    <section className="pt-30 lg:pt-30 px-6">
       <div className="grid lg:grid-cols-2 items-center justify-center">
         {/* Header */}
         <header className="flex flex-col gap-2 sm:items-start mx-auto">

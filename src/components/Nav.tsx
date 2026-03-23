@@ -11,6 +11,13 @@ const navLinkClass = ({ isActive }: { isActive: boolean }) =>
 
 export default function Nav() {
   const [menuOpen, setMenuOpen] = useState(false);
+  const [showNav, setShowNav] = useState(true);
+  const [showHamburger, setShowHamburger] = useState(
+    () => window.innerWidth < 768,
+  );
+
+  const lastScrollYRef = useRef(0);
+  const lastScrollTimeRef = useRef(0);
 
   const buttonRef = useRef<HTMLButtonElement | null>(null);
   const menuRef = useRef<HTMLDivElement | null>(null);
@@ -40,6 +47,55 @@ export default function Nav() {
       {link.label}
     </NavLink>
   ));
+
+  useEffect(() => {
+    const SCROLL_THRESHOLD = 8;
+
+    lastScrollYRef.current = window.scrollY;
+
+    const handleScroll = () => {
+      if (showHamburger) {
+        setShowNav(true);
+        return;
+      }
+
+      const currentScrollY = window.scrollY;
+      const scrollDelta = currentScrollY - lastScrollYRef.current;
+
+      lastScrollTimeRef.current = Date.now();
+
+      if (currentScrollY <= 0) {
+        setShowNav(true);
+        lastScrollYRef.current = currentScrollY;
+        return;
+      }
+
+      if (Math.abs(scrollDelta) < SCROLL_THRESHOLD) {
+        return;
+      }
+
+      setShowNav(scrollDelta < 0);
+      lastScrollYRef.current = currentScrollY;
+    };
+
+    window.addEventListener("scroll", handleScroll, { passive: true });
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, [showHamburger]);
+
+  useEffect(() => {
+    const handleMouseMove = () => {
+      if (showHamburger) return;
+
+      const justScrolled = Date.now() - lastScrollTimeRef.current < 150;
+
+      if (!justScrolled) {
+        setShowNav(true);
+      }
+    };
+
+    window.addEventListener("mousemove", handleMouseMove);
+    return () => window.removeEventListener("mousemove", handleMouseMove);
+  }, [showHamburger]);
 
   // Allows user to close the mobile menu with the Escape key.
   useEffect(() => {
@@ -89,8 +145,13 @@ export default function Nav() {
   // so it does not reappear when shrinking back down.
   useEffect(() => {
     function handleResize() {
-      if (window.innerWidth >= 768) {
+      const hamburgerVisible = window.innerWidth < 768;
+      setShowHamburger(hamburgerVisible);
+
+      if (!hamburgerVisible) {
         closeMenu();
+      } else {
+        setShowNav(true);
       }
     }
 
@@ -99,16 +160,22 @@ export default function Nav() {
   }, []);
 
   return (
-    <nav className="flex h-20 items-center justify-center gap-6 px-4 py-2">
-      <div className="z-10 flex h-10 flex-1 items-center justify-start">
-        Logo Placeholder
-      </div>
+    <>
+      <nav
+        className={`fixed top-0 left-0 z-3 flex h-15 w-full items-center justify-center gap-6 px-4 py-2 bg-bg transition-transform duration-200
+        ${showHamburger || menuOpen || showNav ? "translate-y-0" : "-translate-y-full"}
+      `}
+      >
+        <div className="flex h-10 flex-1 items-center justify-start">
+          Logo Placeholder
+        </div>
 
-      <div className="hidden items-center gap-20 md:flex md:flex-1">
-        {desktopLinks}
-      </div>
+        <div className="hidden items-center gap-20 md:flex md:flex-1">
+          {desktopLinks}
+        </div>
+      </nav>
 
-      <div className="flex w-full justify-end md:hidden">
+      <div className="fixed top-4 right-4 flex z-5 w-full justify-end md:hidden">
         <HamburgerIcon
           menuOpen={menuOpen}
           setMenuOpen={setMenuOpen}
@@ -121,12 +188,12 @@ export default function Nav() {
         ref={menuRef}
         inert={!menuOpen}
         aria-hidden={!menuOpen}
-        className={`fixed top-0 right-0 flex h-full w-full transform flex-col gap-7 bg-surface shadow-md px-4 py-20 transition-transform duration-200 min-[500px]:w-[400px] md:hidden ${
+        className={`fixed top-0 right-0 z-4 flex h-full w-full transform flex-col gap-7 bg-surface shadow-md px-4 py-20 transition-transform duration-200 min-[500px]:w-[400px] md:hidden ${
           menuOpen ? "translate-x-0" : "translate-x-full"
         }`}
       >
         {mobileLinks}
       </div>
-    </nav>
+    </>
   );
 }

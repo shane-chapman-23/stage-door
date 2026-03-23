@@ -1,12 +1,13 @@
 import ContactForm from "@/components/ContactForm";
 import Sponsors from "@/components/Sponsors";
+import OurPurpose from "@/components/OurPurpose";
 
 export default function Home() {
   return (
-    <section className="pt-30 lg:pt-30 px-6">
+    <section className="pt-30">
       <div className="grid xl:grid-cols-2 items-center justify-center sm:h-[55vh]">
         {/* Header */}
-        <header className="flex flex-col gap-2 sm:items-start mx-auto">
+        <header className="flex flex-col gap-2 sm:items-start mx-auto px-5 mb-15 xl:mb-0">
           <h1 className="text-4xl xl:text-4xl 2xl:text-5xl font-extrabold leading-tight font-libre text-left">
             <span>Stage Door Productions</span> <br />
             <span className="">Charitable Trust</span>
@@ -32,8 +33,11 @@ export default function Home() {
           </div>
         </section>
       </div>
-      <section className="flex justify-center mt-30">
+      <section className="flex justify-center mt-10 sm:mt-50 xl:mt-30 mb-20">
         <Sponsors />
+      </section>
+      <section>
+        <OurPurpose />
       </section>
     </section>
   );
